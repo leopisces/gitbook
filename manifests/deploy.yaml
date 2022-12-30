@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: note
+  namespace: web
+spec:
+  selector:
+    matchLabels:
+      app: note
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: note
+    spec:
+      containers:
+      # 应用的镜像
+      - image: harbors.leopisces.cn/my-webs/note:CI_COMMIT_TAG
+        name: note
+        imagePullPolicy: IfNotPresent
+        # 应用的内部端口
+        ports:
+        - containerPort: 80
+          name: noteb80
+      imagePullSecrets:
+      - name: note-publish-secret

@@ -1,0 +1,105 @@
+# 我的笔记项目
+# 作者：Leopisces
+
+# 自动化编译步骤
+stages:
+  - compile                 # 编译         
+  - build                   # 构建镜像、上传私有仓库
+  - deploy                  # k8s部署项目
+
+variables:
+  KUBECONFIG: /tmp/config
+  CI_REGISTRY: https://harbors.leopisces.cn
+  CI_REGISTRY_IMAGE: harbors.leopisces.cn/my-webs/note
+
+# 编译项目
+compile:
+  image: node:alpine
+  stage: compile
+  only:
+    - tags       
+  cache:
+    key:
+      files:
+        - package.json
+    paths:
+      - node_modules
+      - /tmp                                                   # 只有打 tag 时才会触发任务
+  before_script:
+    - echo "before_script"
+    #- chcp.com 65001                                                  # 解决控制台中文乱码
+  script:                                                              # 命令操作
+    - npm config set registry https://registry.npm.taobao.org/         # 设置淘宝镜像源
+    - npm install
+    # 修复GitBook插件问题，这里注释掉几行代码
+    - sed -i 's/fs.stat = statFix(fs.stat)/\/\/fs.stat = statFix(fs.stat)/g' /builds/root/notebooks/node_modules/npm/node_modules/graceful-fs/polyfills.js
+    - sed -i 's/fs.fstat = statFix(fs.fstat)/\/\/fs.fstat = statFix(fs.fstat)/g' /builds/root/notebooks/node_modules/npm/node_modules/graceful-fs/polyfills.js
+    - sed -i 's/fs.lstat = statFix(fs.lstat)/\/\/fs.lstat = statFix(fs.lstat)/g' /builds/root/notebooks/node_modules/npm/node_modules/graceful-fs/polyfills.js
+    - npm run build              # 编译
+  after_script:                  # 在执行命令后执行的操作
+    - echo "after_script"
+    #- rm -r node_modules/*       # 删除构建的 node_modules 目录
+  artifacts:                     # 将编译好的 dist文件夹传递给下一个阶段，用于 kaniko 构建 docker 镜像
+    paths:
+      - _book/*
+      
+# 构建镜像
+build:
+  image: reme3180/executor-debug:latest # 可能需要手动提前下载
+  stage: build
+  only:
+    - tags
+  before_script:
+    - |
+      echo "-----BEGIN CERTIFICATE-----
+      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
+      -----END CERTIFICATE-----" >> /kaniko/ssl/certs/additional-ca-cert-bundle.crt
+  script:
+    # 使用 kaniko 构建 docker 镜像
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(printf "%s:%s" "${HARBOR_USER}" "${HARBOR_PWD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor 
+      --context $CI_PROJECT_DIR 
+      --dockerfile $CI_PROJECT_DIR/Dockerfile 
+      --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+
+#部署到 kubernetes 环境中
+deploy:
+  image: bitnami/kubectl:1.19
+  stage: deploy
+  only:
+    - tags
+  script:
+    # 设置 kubectl 容器的 kubeconfig 文件，使 kubectl 容器有在 Kubernetes 中部署应用的权限
+    - echo $kube_config | base64 -id > $KUBECONFIG
+    - sed -i "s/CI_COMMIT_TAG/$CI_COMMIT_TAG/g" manifests/deploy.yaml
+    - cat manifests/*.yaml
+    - kubectl apply -f manifests/

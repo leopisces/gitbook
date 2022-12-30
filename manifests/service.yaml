@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: note-service
+  namespace: web
+spec:
+  type: NodePort
+  ports:
+  # Port上的映射端口
+  - port: 80
+    targetPort: 80
+    name: note80
+    nodePort: 32002
+  selector:
+    app: note

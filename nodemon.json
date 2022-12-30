@@ -1,0 +1,28 @@
+{
+    "restartable": "rs",
+    "delay": 1000,
+    "colours": true,
+    "verbose": false,
+    "ignore": [
+      "_book/",
+      "node_modules/"
+    ],
+    "watch": [
+        "docs/",
+        "README.md",
+        "LOG.md",
+        "TODO.md",
+        "SUMMARY.md"
+    ],
+    "events": {
+      "restart": "echo restart!"
+    },
+    "execMap": {
+      "js": "npm -v"
+    },
+    "ext": "js, json, md", 
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": "3000"
+    }
+  }

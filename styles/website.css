@@ -1,0 +1,58 @@
+.page-inner {
+    max-width: 80%; 
+}
+.chapter[data-level='1.2.1']{
+    background-image: url(/asset/csdn.ico);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+}
+.chapter[data-level='1.2.2']{
+    background-image: url(/asset/java.ico);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+}
+.chapter[data-level='1.2.3']{
+    background-image: url(/asset/stack.ico);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+}
+.chapter[data-level='1.2.4']{
+    background-image: url(/asset/bky.ico);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+}
+.chapter[data-level='1.2.5']{
+    background-image: url(/asset/cn.ico);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+}
+.chapter[data-level='1.2.6']{
+    background-image: url(/asset/kyzg.ico);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+}
+.chapter[data-level='1.2.7']{
+    background-image: url(/asset/sf.ico);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+}
+.chapter[data-level='1.2.8']{
+    background-image: url(/asset/jj.ico);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+}
+.chapter[data-level='1.2.9']{
+    background-image: url(/asset/51.ico);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+}
+.chapter[data-level='1.2.10']{
+    background-image: url(/asset/w3c.ico);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+}
+.chapter[data-level='1.2.11']{
+    background-image: url(/asset/bootstack.ico);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+}
